@@ -1,3 +1,46 @@
+gminiblink case
+
+```go
+package main
+
+import (
+	"github.com/suiyunonghen/GVCL/Components/DxControls/gminiblink"
+	"github.com/suiyunonghen/GVCL/WinApi"
+	"os"
+)
+
+func main() {
+
+	blink := gminiblink.BlinkLib
+	blink.LoadBlink(`blink64.dll`)
+	wv := blink.WkeCreateWebWindow(gminiblink.WKE_WINDOW_TYPE_POPUP, 0, 0, 0, 1280, 800)
+	blink.WkeShowWindow(wv, true)
+	blink.WkeSetWindowTitle(wv, "aaaaaaaaa")
+	blink.WkeOnDownload(wv, nil, 0)
+	blink.WkeLoadURL(wv, "https://www.baidu.com")
+	blink.WkeSetDebugConfig(wv, "showDevTools", `C:\Users\mzky\go\src\GVCL\test\front_end\inspector.html`)
+	//
+	msg := new(WinApi.MSG)
+	for {
+		if msg.PeekMessage(0, 0, 0, WinApi.PM_REMOVE) {
+			if msg.Message != WinApi.WM_TIMER {
+				//fmt.Println(msg.Message)
+			}
+			if msg.Message == WinApi.WM_QUIT {
+				os.Exit(0)
+				break
+			}
+			msg.TranslateMessage()
+			msg.DispatchMessage()
+		} else {
+			WinApi.WaitMessage()
+		}
+	}
+}
+
+```
+
+
 # GVCL
 Golang Windows GUI Bindings Like Delphi VCL   
 Windows的GUI界面Go语言封装，目标是实现一个类似Delphi VCL版本效果的界面库   
